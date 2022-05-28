@@ -7,8 +7,8 @@ export async function validateBody (req,res,next){
     const { name, phone, cpf, birthday } = req.body;
 
     const checkDate = new RegExp (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/);
-    const checkCpf = new RegExp(/^\d{11}$/)
-    const checkPhone = new RegExp(/^\d{10}|\d{11}$/)
+    const checkCpf = new RegExp(/^(\d{11})$/)
+    const checkPhone = new RegExp(/^(\d{10})|(\d{11})$/)
 
     if ( typeof(name)!=='string' || name?.trim() === '' ) return res.sendStatus(400);
     if ( !(typeof(cpf)==='string' && checkCpf.test(cpf)) ) return res.sendStatus(400);      
