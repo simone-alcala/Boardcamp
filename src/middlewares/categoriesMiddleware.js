@@ -1,12 +1,12 @@
-import connection from './../database/db.js'
+import db from './../database/db.js'
 
 export async function validateNewCategory (req,res,next){
   try {
     const { name } = req.body;
 
-    if ( typeof(name)!=='string' || name.trim() === '' ) return res.sendStatus(400);
+    if ( typeof(name)!=='string' || name?.trim() === '' ) return res.sendStatus(400);
 
-    const categories = await connection.query(
+    const categories = await db.query(
       'SELECT id, name FROM categories WHERE UPPER(name) = $1', [name.toUpperCase()]
     );
 

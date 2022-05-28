@@ -1,22 +1,20 @@
-import connection from './../database/db.js'
+import db from './../database/db.js'
 
 export async function validateNewGame (req,res,next){
   try {
     const { name, stockTotal, pricePerDay, categoryId } = req.body;
 
-    if ( typeof(name)!=='string' || name.trim() === '' ) return res.sendStatus(400);
-
+    if ( typeof(name)!=='string' || name?.trim() === '' ) return res.sendStatus(400);
     if ( isNaN(stockTotal) || !(stockTotal > 0) ) return res.sendStatus(400);
-
     if ( isNaN(pricePerDay) || !(pricePerDay > 0) ) return res.sendStatus(400);
 
-    const category = await connection.query(
+    const category = await db.query(
       'SELECT id FROM categories WHERE id = $1', [categoryId]
     );
     
     if (category.rowCount === 0) return res.sendStatus(400); 
 
-    const games = await connection.query(
+    const games = await db.query(
       'SELECT id, name FROM games WHERE UPPER(name) = $1', [name.toUpperCase()]
     );
     

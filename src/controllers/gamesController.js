@@ -1,9 +1,9 @@
-import connection from './../database/db.js'
+import db from './../database/db.js'
 
 export async function addGame(req,res){
   try {
     const { name,image,stockTotal,categoryId,pricePerDay } = req.body;
-    await connection.query(
+    await db.query(
       `INSERT INTO games (name,image,"stockTotal","categoryId","pricePerDay") 
        VALUES ($1,$2,$3,$4,$5)`, [name,image,stockTotal,categoryId,pricePerDay] 
     );
@@ -20,7 +20,7 @@ export async function getGames(req,res){
     if ( typeof(query) === 'string' ) query = query.toUpperCase();
     else  query = '';
     
-    const games = await connection.query(`
+    const games = await db.query(`
       SELECT games.*, categories.name as "categoryName"
       FROM games
       JOIN categories ON games."categoryId" = categories.id 

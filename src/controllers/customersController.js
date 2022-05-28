@@ -1,11 +1,11 @@
 import dayjs from 'dayjs';
 
-import connection from './../database/db.js'
+import db from './../database/db.js'
 
 export async function addCustomer(req,res){
   try {
     const { name,phone,cpf,birthday } = req.body;
-    await connection.query(
+    await db.query(
       `INSERT INTO customers (name,phone,cpf,birthday) 
        VALUES ($1,$2,$3,$4)`, [name,phone,cpf,birthday] 
     );
@@ -22,7 +22,7 @@ export async function getCustomers(req,res){
 
     if ( typeof(query) !== 'string' ) query = '' ;
     
-    const customers = await connection.query(`
+    const customers = await db.query(`
       SELECT id, name,phone,cpf, to_char(birthday, 'YYYY-MM-DD') AS birthday FROM customers
       WHERE cpf LIKE $1 `,[query+'%']
     );
@@ -38,7 +38,7 @@ export async function getCustomerById(req,res){
   try {
     const { id } = req.params;
     
-    const customer = await connection.query(`
+    const customer = await db.query(`
       SELECT id, name,phone,cpf, to_char(birthday, 'YYYY-MM-DD') AS birthday FROM customers
       WHERE id = $1 `, [Number.parseInt(id)]
     );
@@ -58,7 +58,7 @@ export async function updateCustomer(req,res){
     const { name,phone,cpf,birthday } = req.body;
     const { id } = req.params;
 
-    await connection.query(
+    await db.query(
       `UPDATE customers SET name = $1, phone = $2, cpf = $3, birthday = $4 
        WHERE id = $5`, [name,phone,cpf,birthday,Number.parseInt(id)] 
     );
